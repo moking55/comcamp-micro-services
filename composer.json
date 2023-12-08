@@ -1,0 +1,20 @@
+{
+    "name": "moking55/comcamp-micro-services",
+    "autoload": {
+        "psr-4": {
+            "Moking55\\ComcampMicroServices\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Maythawat Mahawan",
+            "email": "moking55@hotmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6",
+        "larapack/dd": "^1.1",
+        "bensontrent/firestore-php": "^3.1",
+        "phpoffice/phpspreadsheet": "^1.12"
+    }
+}
