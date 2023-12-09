@@ -187,7 +187,9 @@ class FirebaseDataExporter
 
 
         $writer = new Xlsx($spreadsheet);
-        $writer->save('Comcamp22_Exported.xlsx');
+        $writer->save('Comcamp22_Exported_All.xlsx');
+        rename('Comcamp22_Exported_All.xlsx', './storage/Comcamp22_Exported_All.xlsx');
+
     }
 
     // export selected fields by array parameters to Spreadsheet
@@ -282,6 +284,8 @@ class FirebaseDataExporter
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('Comcamp22_Exported_Filters.xlsx');
+        // move file to storage folder
+        rename('Comcamp22_Exported_Filters.xlsx', './storage/Comcamp22_Exported_Filters.xlsx');
     }
 
     public function exportToJson($regroupedData)
@@ -291,13 +295,3 @@ class FirebaseDataExporter
         return $jsonData;
     }
 }
-
-// Usage
-$exporter = new FirebaseDataExporter();
-$regroupedData = $exporter->fetchDataFromFirebase();
-$exporter->exportSelectedFieldsToSpreadsheet($regroupedData, ['uId', 'email', 'status', 'created_at', 'birthDate', 'nickname', 'otherContact']);
-// $exporter->exportToSpreadsheet($regroupedData);
-// $jsonData = $exporter->exportToJson($regroupedData);
-// Output the JSON
-// header('Content-type: application/json');
-// echo $jsonData;
