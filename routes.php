@@ -18,13 +18,15 @@ get('/comcamp/export', function () {
         $regroupedData = $exporter->fetchDataFromFirebase();
         $serverProtocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' : 'http://';
         $exportPath = $serverProtocol . $_SERVER['HTTP_HOST'] . '/storage/';
+
+        $paidOnly = isset($_GET['paidOnly']) && $_GET['paidOnly'] == 'true';
         if (isset($_GET['fields'])) {
             // convert to array
             $fields = explode(',', $_GET['fields']);
             $exportPath = $exportPath . 'Comcamp22_Exported_Filters.xlsx';
-            $exporter->exportSelectedFieldsToSpreadsheet($regroupedData, $fields);
+            $exporter->exportSelectedFieldsToSpreadsheet($regroupedData, $fields, $paidOnly);
         } else {
-            $exporter->exportToSpreadsheet($regroupedData);
+            $exporter->exportToSpreadsheet($regroupedData, $paidOnly);
             $exportPath = $exportPath . 'Comcamp22_Exported_All.xlsx';
         }
 

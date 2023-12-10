@@ -188,6 +188,8 @@ class FirebaseDataExporter
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('Comcamp22_Exported_All.xlsx');
+        unlink('./storage/Comcamp22_Exported_All.xlsx');
+        
         rename('Comcamp22_Exported_All.xlsx', './storage/Comcamp22_Exported_All.xlsx');
 
     }
@@ -282,8 +284,27 @@ class FirebaseDataExporter
         $activeWorksheet->setCellValue('A1', 'รายชื่อผู้สมัครค่ายคอมแคมป์ ครั้งที่ 22');
         $activeWorksheet->getStyle('A1')->getFont()->setSize(20);
 
+        $summaryData = [
+            'รวมผู้สมัครทั้งหมด' => count($regroupedData) . ' คน',
+            'รวมผู้สมัครที่ชำระเงินแล้ว' => count(array_filter($regroupedData, function ($userData) {
+                return $userData['status'];
+            })) . ' คน',
+            'รวมผู้สมัครที่ยังไม่ชำระเงิน' => count(array_filter($regroupedData, function ($userData) {
+                return !$userData['status'];
+            })) . ' คน'
+        ];
+
+        $row = $startRow + 2;
+        foreach ($summaryData as $label => $value) {
+            $activeWorksheet->setCellValue("A" . $row, $label);
+            $activeWorksheet->setCellValue("C" . $row, $value);
+            $row++;
+        }
+
         $writer = new Xlsx($spreadsheet);
         $writer->save('Comcamp22_Exported_Filters.xlsx');
+        // remove old file
+        unlink('./storage/Comcamp22_Exported_Filters.xlsx');
         // move file to storage folder
         rename('Comcamp22_Exported_Filters.xlsx', './storage/Comcamp22_Exported_Filters.xlsx');
     }
